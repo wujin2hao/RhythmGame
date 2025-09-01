@@ -1,0 +1,36 @@
+# --- Unity 生成目录（必须忽略） ---
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]serSettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+sysinfo.txt
+
+# --- IDE/工程文件（本机环境相关） ---
+.vs/
+.idea/
+*.iml
+.vscode/                 # 若你想把 VS Code 的共享设置进库，可删掉这一行
+
+# --- C#/Unity 工程中间文件 ---
+*.csproj
+*.sln
+*.user
+*.pidb
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# --- 打包产物 ---
+*.apk
+*.aab
+*.ipa
+
+# --- 其他 ---
+Assets/AssetStoreTools*
