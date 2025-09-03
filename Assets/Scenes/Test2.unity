@@ -166,8 +166,9 @@ MonoBehaviour:
   musicSource: {fileID: 1933738865}
   responseJumpTrack: {fileID: 11400000, guid: dbf832822e85cfc4bb7d8e7f62b4dba9, type: 2}
   rightBlock: {fileID: 1977490333}
-  hitWindowMs: 90
-  inputOffsetMs: 0
+  hitWindowMs: 200
+  inputOffsetMs: 150
+  debugLog: 1
 --- !u!1001 &594288192
 PrefabInstance:
   m_ObjectHideFlags: 0
