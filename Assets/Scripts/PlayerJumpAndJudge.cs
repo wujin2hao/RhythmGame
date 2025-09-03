@@ -2,10 +2,13 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+using UnityEngine.InputSystem;
+#endif
+
 public class PlayerJumpAndJudge : MonoBehaviour
 {
     public Conductor conductor;
-    public KeyCode key = KeyCode.Space;
 
     [Header("判定窗口(ms)")]
     public float perfectMs = 35f;
@@ -17,28 +20,77 @@ public class PlayerJumpAndJudge : MonoBehaviour
 
     public event Action<string, double> OnJudge; // 结果, 误差ms(带符号)
 
-    Vector3 _basePos;
+    private Vector3 _basePos;
+    private Coroutine _running;
 
-    void Awake() => _basePos = transform.localPosition;
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+    // —— 新 Input System ——
+    private InputAction _jump;
 
-    void Update()
+    private void OnEnable()
     {
-        if (Input.GetKeyDown(key) && conductor != null)
+        if (_jump == null)
         {
-            double errBeats = conductor.ErrorToNearestBeatBeats();   // +晚 -早
-            double errMs = conductor.ErrorMs(errBeats);
-            double abs = Math.Abs(errMs);
+            _jump = new InputAction("Jump", InputActionType.Button, "<Keyboard>/space");
+        }
+        _jump.performed += OnJumpPerformed;
+        _jump.Enable();
+    }
 
-            string res = abs <= perfectMs ? "Perfect" :
-                         abs <= goodMs    ? "Good"    : "Miss";
-
-            OnJudge?.Invoke(res, errMs);
-
-            if (res != "Miss") StartCoroutine(Bounce());
+    private void OnDisable()
+    {
+        if (_jump != null)
+        {
+            _jump.performed -= OnJumpPerformed;
+            _jump.Disable();
         }
     }
 
-    IEnumerator Bounce()
+    private void OnJumpPerformed(InputAction.CallbackContext ctx)
+    {
+        TryJudgeAndJump();
+    }
+#else
+    // —— 旧 Input（或 Both 时走旧）——
+    public KeyCode key = KeyCode.Space;
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(key))
+        {
+            TryJudgeAndJump();
+        }
+    }
+#endif
+
+    private void Awake()
+    {
+        _basePos = transform.localPosition;
+    }
+
+    private void TryJudgeAndJump()
+    {
+        if (conductor == null) return;
+
+        double errBeats = conductor.ErrorToNearestBeatBeats(); // +晚 -早
+        double errMs = conductor.ErrorMs(errBeats);
+        double abs = Math.Abs(errMs);
+
+        string res;
+        if (abs <= perfectMs) res = "Perfect";
+        else if (abs <= goodMs) res = "Good";
+        else res = "Miss";
+
+        if (OnJudge != null) OnJudge(res, errMs);
+
+        if (res != "Miss")
+        {
+            if (_running != null) StopCoroutine(_running);
+            _running = StartCoroutine(Bounce());
+        }
+    }
+
+    private IEnumerator Bounce()
     {
         Vector3 up = _basePos + Vector3.up * jumpHeight;
         float t = 0f;
@@ -51,5 +103,6 @@ public class PlayerJumpAndJudge : MonoBehaviour
             yield return null;
         }
         transform.localPosition = _basePos;
+        _running = null;
     }
 }

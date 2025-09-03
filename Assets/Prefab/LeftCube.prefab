@@ -96,7 +96,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4385313410999966438}
-  - component: {fileID: 7738278287948249545}
+  - component: {fileID: 3374078136618129596}
+  - component: {fileID: 19417128463911117}
   m_Layer: 0
   m_Name: LeftCube
   m_TagString: Untagged
@@ -120,7 +121,7 @@ Transform:
   - {fileID: 4404977904895910584}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7738278287948249545
+--- !u!114 &3374078136618129596
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -129,9 +130,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 4943768052924746840}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b60b78d2205c5947ad20718567f874e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7c444b51c680da7498ae6e3df96625a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conductor: {fileID: 0}
+  eventID: CallJump
   jumpHeight: 0.5
   jumpDuration: 0.1
+  usePayloadAsHeight: 1
+--- !u!114 &19417128463911117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4943768052924746840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88cd1a2058c5b3b48935d20256eed9ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventID: CallJump
